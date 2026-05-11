@@ -1,1 +1,30 @@
+name: Build macOS App
 
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build app
+        run: cmake --build build --config Release --parallel 3
+
+      - name: Package app
+        run: ditto -c -k --keepParent "build/Notepad++.app" "Notepad++.app.zip"
+
+      - name: Upload app
+        uses: actions/upload-artifact@v4
+        with:
+          name: NotepadPlusPlusMac
+          path: Notepad++.app.zip
