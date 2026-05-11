@@ -54,9 +54,9 @@ static NSString *const kWinPluginListURL =
     @"https://raw.githubusercontent.com/notepad-plus-plus/nppPluginList/master/src/pl.x64.json";
 // macOS arm64 plugin list (our ported plugins — determines what's installable)
 static NSString *const kMacPluginListURL =
-    @"https://raw.githubusercontent.com/notepad-plus-plus-mac/nppPluginList/main/pl.macos-arm64.json";
+    @"https://raw.githubusercontent.com/nextpad-plus-plus/nppPluginList/main/pl.macos-arm64.json";
 static NSString *const kPluginListRepoURL =
-    @"https://github.com/notepad-plus-plus-mac/nppPluginList";
+    @"https://github.com/nextpad-plus-plus/nppPluginList";
 static NSString *const kPluginListVersion = @"0.2.0";
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -397,7 +397,7 @@ static NSString *const kPluginListVersion = @"0.2.0";
 - (void)mergePluginListsWin:(NSData *)winData mac:(NSData *)macData {
     // macOS plugin list is the source of truth for what the "Available" tab
     // offers — our macOS binaries are independently built, signed, and hosted
-    // under the notepad-plus-plus-mac org, so a plugin must be present in
+    // under the nextpad-plus-plus org, so a plugin must be present in
     // pl.macos-arm64.json to be installable. The Windows list is consulted
     // twice:
     //   1. as a metadata fallback for mac entries that also exist upstream

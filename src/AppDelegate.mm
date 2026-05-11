@@ -624,7 +624,7 @@
 
     about.informativeText = [NSString stringWithFormat:
         @"Build time: %s - %s\n\n"
-        @"Home: https://notepad-plus-plus-mac.org\n\n"
+        @"Home: https://nextpad.org\n\n"
         @"%@", __DATE__, __TIME__, license];
 
     // Use our logo
@@ -644,7 +644,7 @@
 
 // ── Update check (GitHub Releases API) ──────────────────────────────────────
 
-static NSString *const kGitHubReleasesAPI = @"https://api.github.com/repos/notepad-plus-plus-mac/notepad-plus-plus-macos/releases/latest";
+static NSString *const kGitHubReleasesAPI = @"https://api.github.com/repos/nextpad-plus-plus/nextpad-plus-plus-macos/releases/latest";
 static NSString *const kUpdateMenuItemTag = @"checkForUpdatesMenuItem";
 
 /// Find the "Check for Updates..." menu item in the app menu.
