@@ -157,22 +157,26 @@ set(APP_HEADERS
 add_executable(NotepadPlusPlusMac MACOSX_BUNDLE ${APP_SRCS} ${APP_HEADERS})
 
 # Copy icons at BUILD time so updated PNGs are picked up on every make, not just cmake re-run
-add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_SOURCE_DIR}/resources/icons"
-        "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/icons"
-    COMMENT "Syncing icons into app bundle")
+if(EXISTS "${CMAKE_SOURCE_DIR}/resources/icons")
+    add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_SOURCE_DIR}/resources/icons"
+            "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/icons"
+        COMMENT "Syncing icons into app bundle")
+endif()
 
-add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
-    # Force-copy so an updated icns is always written (copy_if_different can miss timestamp ties)
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_SOURCE_DIR}/resources/npp.icns"
-        "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/npp.icns"
-    # Touch the bundle so macOS knows the icon changed, then re-register with LaunchServices
-    COMMAND touch "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>"
-    COMMAND /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister
-            -f "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>"
-    COMMENT "Copying app icon and refreshing macOS icon cache")
+if(EXISTS "${CMAKE_SOURCE_DIR}/resources/npp.icns")
+    add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
+        # Force-copy so an updated icns is always written (copy_if_different can miss timestamp ties)
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_SOURCE_DIR}/resources/npp.icns"
+            "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/npp.icns"
+        # Touch the bundle so macOS knows the icon changed, then re-register with LaunchServices
+        COMMAND touch "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>"
+        COMMAND /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister
+                -f "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>"
+        COMMENT "Copying app icon and refreshing macOS icon cache")
+endif()
 
 add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -183,11 +187,13 @@ add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
 # DMG installer background: bundled inside the app so the release DMG can
 # point Finder at Notepad++.app:Contents:Resources:dmg-background.tiff
 # without needing a visible .background/ folder in the DMG root.
-add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_SOURCE_DIR}/resources/dmg-background.tiff"
-        "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/dmg-background.tiff"
-    COMMENT "Copying DMG installer background into bundle")
+if(EXISTS "${CMAKE_SOURCE_DIR}/resources/dmg-background.tiff")
+    add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_SOURCE_DIR}/resources/dmg-background.tiff"
+            "$<TARGET_BUNDLE_DIR:NotepadPlusPlusMac>/Contents/Resources/dmg-background.tiff"
+        COMMENT "Copying DMG installer background into bundle")
+endif()
 
 add_custom_command(TARGET NotepadPlusPlusMac POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
